@@ -93,6 +93,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "{ printf '[claude-settings UserPromptSubmit pwd=%s PATH=%s] ' \"$PWD\" \"$PATH\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+          },
+          {
+            "type": "command",
             "command": "aidlc engine hook record-human-turn",
             "timeout": 1800
           }
@@ -103,6 +107,10 @@
       {
         "matcher": "",
         "hooks": [
+          {
+            "type": "command",
+            "command": "{ printf '[claude-settings SessionStart pwd=%s PATH=%s] ' \"$PWD\" \"$PATH\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+          },
           {
             "type": "command",
             "command": "aidlc engine hook session-start",
@@ -124,6 +132,15 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{ printf '[claude-settings PostToolUse] '; head -c 1500; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+          }
+        ]
+      },
       {
         "matcher": "Write|Edit",
         "hooks": [

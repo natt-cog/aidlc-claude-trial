@@ -1,0 +1,8 @@
+{
+  "SessionStart": [
+    { "matcher": "", "hooks": [ { "type": "command", "command": "{ printf '[devin-hooks.v1 SessionStart pwd=%s PATH=%s] ' \"$PWD\" \"$PATH\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\"" } ] }
+  ],
+  "UserPromptSubmit": [
+    { "matcher": "", "hooks": [ { "type": "command", "command": "{ printf '[devin-hooks.v1 UserPromptSubmit pwd=%s] ' \"$PWD\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\"" } ] }
+  ]
+}
