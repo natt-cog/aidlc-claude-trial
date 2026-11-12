@@ -1,8 +1,173 @@
 {
-  "SessionStart": [
-    { "matcher": "", "hooks": [ { "type": "command", "command": "{ printf '[devin-hooks.v1 SessionStart pwd=%s PATH=%s] ' \"$PWD\" \"$PATH\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\"" } ] }
+  "PreToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "{ printf '[devin-hooks.v1 PreToolUse pwd=%s] ' \"$PWD\"; head -c 400; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+        }
+      ]
+    },
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook fold-usage",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "Task|Agent",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook deliver-stage-rules",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "Read|NotebookRead|Edit|MultiEdit|Write|NotebookEdit|LS|Glob|Grep|Bash|Task|Agent",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook guard-tool-call",
+          "timeout": 1800
+        }
+      ]
+    }
   ],
   "UserPromptSubmit": [
-    { "matcher": "", "hooks": [ { "type": "command", "command": "{ printf '[devin-hooks.v1 UserPromptSubmit pwd=%s] ' \"$PWD\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\"" } ] }
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "{ printf '[devin-hooks.v1 UserPromptSubmit pwd=%s] ' \"$PWD\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+        }
+      ]
+    },
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook record-human-turn",
+          "timeout": 1800
+        }
+      ]
+    }
+  ],
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "{ printf '[devin-hooks.v1 SessionStart pwd=%s] ' \"$PWD\"; cat; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+        }
+      ]
+    },
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook session-start",
+          "timeout": 1800
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "{ printf '[devin-hooks.v1 PostToolUse pwd=%s] ' \"$PWD\"; head -c 600; echo; } >> \"$HOME/aidlc-hook-stdin.log\""
+        }
+      ]
+    },
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook write-audit-log",
+          "timeout": 1800
+        },
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook run-sensors",
+          "timeout": 3600
+        }
+      ]
+    },
+    {
+      "matcher": "TaskUpdate",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook sync-workflow-state",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "AskUserQuestion",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook record-human-turn",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook rebuild-stage-graph",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "Task|Agent",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook deliver-stage-rules",
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook fold-usage",
+          "timeout": 1800
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"$HOME/.local/bin/aidlc\" engine hook continue-workflow",
+          "timeout": 3600
+        }
+      ]
+    }
   ]
 }
